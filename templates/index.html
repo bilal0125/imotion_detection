@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotion Detection Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Student Emotion Detection Dashboard</h1>
+        <div class="session-info">
+            Session: TP057648 | Teacher: Hema Latha | Subject: CS
+        </div>
+
+        <div class="video-feed">
+            <img src="{{ url_for('video_feed') }}" id="video-stream">
+        </div>
+
+        <div class="dominant-emotion">
+            Dominant Emotion: <span id="dominant-emotion">N/A</span>
+        </div>
+
+        <div class="report-button">
+            <button class="generate-report" onclick="fetchReport()">Generate Report</button>
+        </div>
+
+        <div class="report-output" id="report-output" style="display: none;">
+            <h2>Emotional Engagement Report</h2>
+            <p id="report-summary"></p>
+        </div>
+    </div>
+
+    <div class="footer">
+        &copy; 2024 Emotion Detection System
+    </div>
+
+    <script>
+        function fetchReport() {
+            fetch('/report')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        document.getElementById('report-output').style.display = 'block';
+                        document.getElementById('dominant-emotion').textContent = data.dominant_emotion;
+                        document.getElementById('report-summary').textContent = data.analysis;
+                    }
+                });
+        }
+    </script>
+</body>
+
+</html>
